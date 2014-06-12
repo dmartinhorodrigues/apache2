@@ -17,6 +17,15 @@
 # limitations under the License.
 #
 
+default['php_apache2']['short_open_tag'] = 'On'
+default['php_apache2']['max_execution_time'] = '30'
+default['php_apache2']['max_input_time'] = '60'
+default['php_apache2']['memory_limit'] = '128M'
+default['php_apache2']['use_syslog'] = false
+default['php_apache2']['post_max_size'] = '8M'
+default['php_apache2']['upload_max_filesize'] = '2M'
+default['php_apache2']['date.timezone'] = 'Europe/Lisbon'
+
 default['apache']['root_group'] = 'root'
 
 # Where the various parts of apache are

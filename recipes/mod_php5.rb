@@ -20,6 +20,13 @@
 case node['platform_family']
 when 'debian'
   package 'libapache2-mod-php5'
+  
+  template "/etc/php5/apache2/php.ini" do
+    source "mods/php.ini.erb"
+    owner "root"
+    group "root"
+    mode  "0644"
+  end
 when 'arch'
   package 'php-apache' do
     notifies :run, 'execute[generate-module-list]', :immediately
