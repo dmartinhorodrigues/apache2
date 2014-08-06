@@ -1,11 +1,15 @@
 AllCops:
-  Excludes:
+  Exclude:
     - vendor/**
     - ruby/**
+    - test/**/*
+    - files/**/*
 
 AlignParameters:
   Enabled: false
 Encoding:
+  Enabled: false
+UselessAssignment:
   Enabled: false
 LineLength:
   Max: 300
