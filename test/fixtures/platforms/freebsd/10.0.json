@@ -1,8 +1,10 @@
 {
     "apache": {
         "version": "2.4",
+        "devel_package": "httpd-devel",
         "binary": "/usr/local/sbin/httpd",
         "package": "apache24",
+        "mpm": "prefork",
         "dir": "/usr/local/etc/apache24",
         "lib_dir": "/usr/local/libexec/apache24",
         "libexec_dir": "/usr/local/libexec/apache24",
@@ -31,6 +33,15 @@
             "mime",
             "negotiation",
             "setenvif"
-        ]
+        ],
+         "mod_auth_openid": {
+             "version": "0.8"
+         },
+         "mod_ssl": {
+             "pkg_name": "mod_ssl"
+         },
+         "mod_php5": {
+             "so_filename": "libphp5.so"
+         }
     }
 }

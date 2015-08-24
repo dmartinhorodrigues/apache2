@@ -1,7 +1,9 @@
 {
     "apache": {
         "package": "apache2",
+        "devel_package": "apache2-dev",
         "binary": "/usr/sbin/apache2",
+        "mpm": "worker",
         "dir": "/etc/apache2",
         "lib_dir": "/usr/lib/apache2",
         "libexec_dir": "/usr/lib/apache2/modules",
@@ -13,8 +15,6 @@
         "log_dir": "/var/log/apache2",
         "root_group": "root",
         "service_name": "apache2",
-        "service_restart_command": "/usr/sbin/invoke-rc.d apache2 restart",
-        "service_reload_command": "/usr/sbin/invoke-rc.d apache2 reload",
         "default_site_name": "000-default",
         "default_site_enabled": false,
         "default_modules": [
@@ -32,6 +32,15 @@
             "mime",
             "negotiation",
             "setenvif"
-        ]
+        ],
+        "mod_auth_openid": {
+            "version": "0.8"
+        },
+        "mod_ssl": {
+            "pkg_name": "mod_ssl"
+        },
+        "mod_php5": {
+            "so_filename": "libphp5.so"
+        }
     }
 }

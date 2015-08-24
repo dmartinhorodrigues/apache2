@@ -1,9 +1,10 @@
 AllCops:
   Exclude:
-    - vendor/**
-    - ruby/**
+    - vendor/**/*
+    - ruby/**/*
     - test/**/*
     - files/**/*
+    - .kitchen/**/*
 
 AlignParameters:
   Enabled: false
@@ -21,3 +22,5 @@ IfUnlessModifier:
   Enabled: false
 TrivialAccessors:
   ExactNameMatch: true
+Style/RegexpLiteral:
+  Enabled: false

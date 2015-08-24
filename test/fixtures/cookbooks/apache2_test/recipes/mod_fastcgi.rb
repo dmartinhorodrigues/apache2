@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: apache2
-# Recipe:: logrotate
+# Cookbook Name:: apache2_test
+# Recipe:: mod_fastcgi
 #
-# Copyright 2012, Opscode, Inc.
+# Copyright 2012, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,15 +17,5 @@
 # limitations under the License.
 #
 
-apache_service = service 'apache2' do
-  action :nothing
-end
-
-begin
-  include_recipe 'logrotate'
-rescue
-  Chef::Log.warn('The apache::logrotate recipe requires the logrotate cookbook. Install the cookbook with `knife cookbook site install logrotate`.')
-end
-logrotate_app apache_service.service_name do
-  path "#{node['apache']['log_dir']}/*.log"
-end
+include_recipe 'apache2::default'
+include_recipe 'apache2::mod_fastcgi'

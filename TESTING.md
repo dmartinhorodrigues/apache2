@@ -5,7 +5,7 @@ This cookbook uses a variety of testing components:
 - Chef Style lints: [Foodcritic](http://www.foodcritic.io/)
 - Ruby Style lints: [Rubocop](https://github.com/bbatsov/rubocop)
 
-You can install the [Chef Development Kit (Chef-DK)](http://downloads.getchef.com/chef-dk/) to more easily install the above components.
+You can install the [Chef Development Kit (Chef-DK)](http://downloads.chef.io/chef-dk/) to more easily install the above components.
 
 
 Prerequisites
@@ -26,11 +26,11 @@ Development
 -----------
 1. Clone the git repository from GitHub:
 
-        $ git clone git@github.com:onehealth-cookbooks/apache2.git
+        $ git clone git@github.com:svanzoest-cookbooks/apache2.git
 
 2. Install the dependencies using bundler:
 
-        $ bundle install
+        $ bundle install --path ../vendor
 
 3. Create a branch for your changes:
 
@@ -46,4 +46,4 @@ Development
 
 7. Assuming the tests pass, open a Pull Request on GitHub
 
-For more information, see [OneHealth's Contribution Guidelines](https://github.com/onehealth-cookbooks/apache2/blob/master/CONTRIBUTING.md)
+For more information, see [the cookbooks Contribution Guidelines](https://github.com/svanzoest-cookbooks/apache2/blob/master/CONTRIBUTING.md)

@@ -4,9 +4,7 @@ driver:
 
 provisioner:
   name: chef_solo
-  require_chef_omnibus: latest
-
-provisioner:
+  require_chef_omnibus: 12.0.3
   data_path: test/fixtures
 
 platforms:
@@ -25,13 +23,10 @@ platforms:
 - name: debian-7.6
   run_list:
   - recipe[apt]
-- name: fedora-20
+- name: fedora-21
   run_list:
   - recipe[yum]
-- name: freebsd-10.0
-#- name: freebsd-9.2
-#  run_list:
-#    - recipe[freebsd::portsnap]
+- name: freebsd-10.1
 # Cannot pull from repo when not in EC2
 #- name: amazon-2014.3
 #  driver:
@@ -42,19 +37,19 @@ platforms:
 #  driver:
 #    box: arch-2013.02.01
 #    box_url: http://cloud.terry.im/vagrant/archlinux-x86_64.box
+#  run_list:
+#  - recipe[pacman]
 #- name: redhat
 - name: scientific-6.4
   driver:
     box: lyte-scientific-6-minimal
     box_url: http://lyte.id.au/vagrant/sl6-64-lyte.box
-- name: opensuse-11.1
-  driver:
-    box: opensuse-11.1
-    box_url: https://s3.amazonaws.com/minesense/vagrant/opensuse-11.1-i586.box
 - name: opensuse-13.1
   driver:
-    box: opensuse-13.1_64
-    box_url: http://share.cabtec.net/packer/opensuse-13.1-x86_64-0.3.0-virtualbox.box
+    box: opscode-opensuse-13.1
+    box_url: http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_opensuse-13.1-x86_64_chef-provisionerless.box
+  run_list:
+  - recipe[zypper]
 
 suites:
 - name: default
@@ -68,6 +63,7 @@ suites:
   - recipe[apache2_test::basic_web_app]
   - recipe[apache2_test::broken_conf]
   - recipe[apache2_test::modules]
+  - recipe[apache2_test::mod_ssl]
   - recipe[apache2_test::mod_auth_basic]
   - recipe[apache2_test::mod_auth_digest]
 # - recipe[apache2_test::mod_auth_openid]
@@ -77,24 +73,60 @@ suites:
   - recipe[apache2_test::mod_authz_unlisted_host]
   - recipe[apache2_test::mod_authz_user]
   - recipe[apache2_test::mod_cgi]
+# not supported by apache 2.4 without source compile with non-maintainer patches
+# - recipe[apache2_test::mod_fastcgi]
 # - recipe[apache2_test::mod_dav_svn]
   - recipe[apache2_test::mod_expires]
-  - recipe[apache2_test::mod_perl]
-  - recipe[apache2_test::mod_php5]
-# - recipe[apache2_test::mod_proxy_ajp]
-  - recipe[apache2_test::mod_python]
-  - recipe[apache2_test::mod_ssl]
   - recipe[apache2_test::mod_status_remote]
-- name: worker
+- name: prefork
   includes: [
-    'centos-7.0',
+    'centos-6.5',
     'ubuntu-14.04'
   ]
   attributes:
     machine_fqdn: working.computers.biz
     machine_fqdn_as_hostname: true
     apache:
+      mpm: prefork
+  run_list:
+  - recipe[fqdn]
+  - recipe[apache2_test::setup]
+  - recipe[apache2_test::default]
+  - recipe[apache2_test::broken_conf]
+  - recipe[apache2_test::modules]
+  - recipe[apache2_test::mod_cgi]
+  - recipe[apache2_test::mod_fastcgi]
+  - recipe[apache2_test::mod_perl]
+  - recipe[apache2_test::mod_php5]
+# - recipe[apache2_test::mod_proxy_ajp]
+  - recipe[apache2_test::mod_python]
+  - recipe[apache2_test::mod_ssl]
+- name: worker
+  includes: [
+    'centos-7.0',
+    'ubuntu-12.04'
+  ]
+  attributes:
+    machine_fqdn: working.computers.biz
+    machine_fqdn_as_hostname: true
+    apache:
       mpm: worker
+  run_list:
+  - recipe[fqdn]
+  - recipe[apache2_test::setup]
+  - recipe[apache2_test::default]
+  - recipe[apache2_test::basic_web_app]
+  - recipe[apache2_test::broken_conf]
+  - recipe[apache2_test::modules]
+- name: event
+  includes: [
+    'ubuntu-14.04'
+  ]
+  attributes:
+    machine_fqdn: working.computers.biz
+    machine_fqdn_as_hostname: true
+    apache:
+      mpm: event
   run_list:
   - recipe[fqdn]
   - recipe[apache2_test::setup]

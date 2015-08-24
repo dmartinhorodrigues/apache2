@@ -2,7 +2,7 @@
 # Cookbook Name:: apache2_test
 # Recipe:: mod_auth_digest
 #
-# Copyright 2012, Opscode, Inc.
+# Copyright 2012, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,10 +25,11 @@ directory "#{node['apache_test']['root_dir']}/secure" do
 end
 
 # htdigest won't read the password from STDIN
-bash 'add_credentials' do
+script 'add_credentials' do
   code %Q{
     (echo -n "#{node['apache_test']['auth_username']}:private area:" && echo -n "#{node['apache_test']['auth_username']}:private area:#{node['apache_test']['auth_password']}" | md5sum | awk '{print $1}') > /#{node['apache_test']['root_dir']}/secure/.htdigest
   }
+  interpreter node['platform_family'] == 'freebsd' ? 'csh' : 'bash'
 end
 
 web_app 'secure' do

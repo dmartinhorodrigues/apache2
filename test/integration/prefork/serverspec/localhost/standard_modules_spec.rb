@@ -14,11 +14,10 @@
 # limitations under the License.
 #
 require "#{ENV['BUSSER_ROOT']}/../kitchen/data/serverspec_helper"
-if property[:apache][:version] == '2.4' && %w(RedHat RedHat7 Fedora).include?(os[:family])
 
-else
-  describe 'apache2::mod_python' do
-    expected_module = 'python'
+property[:apache][:default_modules].each do |expected_module|
+  expected_module = 'authz_default' if expected_module == 'authz_core' &&  property[:apache][:version] != '2.4'
+  describe "apache2::mod_#{expected_module}" do
     subject(:available) { file("#{property[:apache][:dir]}/mods-available/#{expected_module}.load") }
     it "mods-available/#{expected_module}.load is accurate" do
       expect(available).to be_file
@@ -33,8 +32,8 @@ else
 
     subject(:loaded_modules) { command("APACHE_LOG_DIR=#{property[:apache][:log_dir]} #{property[:apache][:binary]} -M") }
     it "#{expected_module} is loaded" do
-      expect(loaded_modules).to return_exit_status 0
-      expect(loaded_modules).to return_stdout(/#{expected_module}_module/)
+      expect(loaded_modules.exit_status).to eq 0
+      expect(loaded_modules.stdout).to match(/#{expected_module}_module/)
     end
   end
 end

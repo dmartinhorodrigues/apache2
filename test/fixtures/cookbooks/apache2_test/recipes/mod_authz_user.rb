@@ -2,7 +2,7 @@
 # Cookbook Name:: apache2_test
 # Recipe:: mod_authz_user
 #
-# Copyright 2012, Opscode, Inc.
+# Copyright 2012, Chef Software, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ end
 
 package 'apache2-utils' if platform_family?('debian', 'suse') && node['apache']['version'] == '2.4'
 
-bash 'add-credentials' do
+script 'add-credentials' do
   case node['platform_family']
   when 'suse'
     code %Q{
@@ -39,6 +39,7 @@ bash 'add-credentials' do
       htpasswd -b #{secure_dir}/.htpasswd meatballs secret
     }
   end
+  interpreter node['platform_family'] == 'freebsd' ? 'csh' : 'bash'
   action :run
 end
 
