@@ -27,6 +27,7 @@ default['php_apache2']['use_syslog'] = false
 default['php_apache2']['post_max_size'] = '8M'
 default['php_apache2']['upload_max_filesize'] = '2M'
 default['php_apache2']['date.timezone'] = 'Europe/Lisbon'
+default['php_apache2']['gc_probability'] = '1'
 
 default['apache']['mpm'] =
   case node['platform_family']
